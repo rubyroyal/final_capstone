@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_Banner {
+  ma_banner Int       @id
+  ma_phim   Int?
+  hinh_anh  String?   @db.VarChar(255)
+  tbl_Phim  tbl_Phim? @relation(fields: [ma_phim], references: [ma_phim], onDelete: NoAction, onUpdate: NoAction, map: "tbl_Banner_ibfk_1")
+
+  @@index([ma_phim], map: "ma_phim")
+}
+
+model tbl_CumRap {
+  ma_cum_rap      Int             @id
+  ten_cum_rap     String?         @db.VarChar(255)
+  dia_chi         String?         @db.VarChar(255)
+  ma_he_thong_rap Int?
+  tbl_HeThongRap  tbl_HeThongRap? @relation(fields: [ma_he_thong_rap], references: [ma_he_thong_rap], onDelete: NoAction, onUpdate: NoAction, map: "tbl_CumRap_ibfk_1")
+  tbl_RapPhim     tbl_RapPhim[]
+
+  @@index([ma_he_thong_rap], map: "ma_he_thong_rap")
+}
+
+model tbl_DatVe {
+  tai_khoan     Int            @unique
+  ma_lich_chieu Int
+  ma_ghe        Int?
+  tbl_NguoiDung tbl_NguoiDung?
+
+  @@id([tai_khoan, ma_lich_chieu])
+}
+
+model tbl_Ghe {
+  ma_ghe   Int     @id
+  ten_ghe  String? @db.VarChar(255)
+  loai_ghe String? @db.VarChar(255)
+  ma_rap   Int?
+}
+
+model tbl_HeThongRap {
+  ma_he_thong_rap  Int          @id
+  ten_he_thong_rap String?      @db.VarChar(255)
+  logo             String?      @db.VarChar(255)
+  tbl_CumRap       tbl_CumRap[]
+}
+
+model tbl_LichChieu {
+  ma_lich_chieu  Int       @id
+  ma_rap         Int?
+  ma_phim        Int?
+  ngay_gio_chieu DateTime? @db.DateTime(0)
+  gia_ve         Int?
+}
+
+model tbl_NguoiDung {
+  tai_khoan       Int       @id
+  ho_ten          String?   @db.VarChar(255)
+  email           String?   @db.VarChar(255)
+  so_dt           String?   @db.VarChar(255)
+  mat_khau        String?   @db.VarChar(255)
+  loai_nguoi_dung String?   @db.VarChar(255)
+  tbl_DatVe       tbl_DatVe @relation(fields: [tai_khoan], references: [tai_khoan], onDelete: NoAction, onUpdate: NoAction, map: "tbl_NguoiDung_ibfk_1")
+}
+
+model tbl_Phim {
+  ma_phim         Int          @id
+  ten_phim        String?      @db.VarChar(255)
+  trailer         String?      @db.VarChar(255)
+  hinh_anh        String?      @db.VarChar(255)
+  mo_ta           String?      @db.VarChar(255)
+  ngay_khoi_chieu DateTime?    @db.Date
+  danh_gia        Int?
+  hot             Boolean?
+  dang_chieu      Boolean?
+  sap_chieu       Boolean?
+  tbl_Banner      tbl_Banner[]
+}
+
+model tbl_RapPhim {
+  ma_rap     Int         @id
+  ten_rap    String?     @db.VarChar(255)
+  ma_cum_rap Int?
+  tbl_CumRap tbl_CumRap? @relation(fields: [ma_cum_rap], references: [ma_cum_rap], onDelete: NoAction, onUpdate: NoAction, map: "tbl_RapPhim_ibfk_1")
+
+  @@index([ma_cum_rap], map: "ma_cum_rap")
+}

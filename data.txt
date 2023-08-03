@@ -1,0 +1,121 @@
+BEGIN TRANSACTION;
+
+BEGIN TRY
+    -- Chèn dữ liệu cho bảng tbl_Phim
+    INSERT INTO tbl_Phim (ma_phim, ten_phim, trailer, hinh_anh, mo_ta, ngay_khoi_chieu, danh_gia, hot, dang_chieu, sap_chieu)
+    VALUES
+    (1, 'Avengers: Endgame', 'https://www.youtube.com/watch?v=TcMBFSGVi1c', 'https://www.example.com/avengers_endgame.jpg', 'The Avengers must assemble once more to undo the actions of Thanos and restore order to the universe.', '2019-04-26', 9, 1, 0, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (2, 'Inception', 'https://www.youtube.com/watch?v=YoHD9XEInc0', 'https://www.example.com/inception.jpg', 'A thief enters the subconscious of his targets to steal their secrets.', '2010-07-16', 8, 0, 1, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (3, 'The Dark Knight', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 'https://www.example.com/dark_knight.jpg', 'Batman faces the Joker, a criminal mastermind who seeks to create chaos in Gotham City.', '2008-07-18', 9, 1, 0, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (4, 'Interstellar', 'https://www.youtube.com/watch?v=zSWdZVtXT7E', 'https://www.example.com/interstellar.jpg', 'A team of astronauts embarks on a journey through a wormhole near Saturn to find a new habitable planet.', '2014-11-07', 8, 0, 0, 1),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (5, 'The Shawshank Redemption', 'https://www.youtube.com/watch?v=6hB3S9bIaco', 'https://www.example.com/shawshank_redemption.jpg', 'A banker is wrongly convicted of murder and forms a deep bond with his fellow inmates in prison.', '1994-09-23', 10, 0, 1, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (6, 'Avatar', 'https://www.youtube.com/watch?v=5PSNL1qE6VY', 'https://www.example.com/avatar.jpg', 'A paraplegic Marine is sent to the moon Pandora on a unique mission.', '2009-12-18', 7, 0, 0, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (7, 'Joker', 'https://www.youtube.com/watch?v=zAGVQLHvwOY', 'https://www.example.com/joker.jpg', 'The origin story of the iconic DC Comics villain, the Joker.', '2019-10-04', 9, 0, 1, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (8, 'Pulp Fiction', 'https://www.youtube.com/watch?v=s7EdQ4FqbhY', 'https://www.example.com/pulp_fiction.jpg', 'Various interrelated stories of crime, redemption, and dark humor intersect in Los Angeles.', '1994-10-14', 9, 0, 1, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (9, 'The Godfather', 'https://www.youtube.com/watch?v=sY1S34973zA', 'https://www.example.com/the_godfather.jpg', 'The aging patriarch of an organized crime dynasty transfers control to his reluctant son.', '1972-03-24', 10, 1, 0, 0),
+    -- Tiếp tục chèn dữ liệu cho tbl_Phim
+    (10, 'The Lord of the Rings: The Return of the King', 'https://www.youtube.com/watch?v=r5X-hFf6Bwo', 'https://www.example.com/lotr_return_of_the_king.jpg', 'The final battle for Middle-earth, as the Free Peoples of Middle-earth unite against Sauron.', '2003-12-17', 9, 0, 1, 0);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_Banner
+    INSERT INTO tbl_Banner (ma_banner, ma_phim, hinh_anh) VALUES
+    (1, 1, 'https://www.example.com/banner_avengers_endgame.jpg'),
+    (2, 3, 'https://www.example.com/banner_the_dark_knight.jpg'),
+    (3, 5, 'https://www.example.com/banner_shawshank_redemption.jpg'),
+    (4, 7, 'https://www.example.com/banner_joker.jpg'),
+    (5, 9, 'https://www.example.com/banner_the_godfather.jpg'),
+    (6, 2, 'https://www.example.com/banner_inception.jpg'),
+    (7, 4, 'https://www.example.com/banner_interstellar.jpg'),
+    (8, 6, 'https://www.example.com/banner_avatar.jpg'),
+    (9, 8, 'https://www.example.com/banner_pulp_fiction.jpg'),
+    (10, 10, 'https://www.example.com/banner_lotr_return_of_the_king.jpg');
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_NguoiDung
+    INSERT INTO tbl_NguoiDung (tai_khoan, ho_ten, email, so_dt, mat_khau, loai_nguoi_dung) VALUES
+    (1001, 'Nguyen Van A', 'nguyenvana@example.com', '0987654321', 'hashed_password_1', 'normal_user'),
+    (1002, 'Tran Thi B', 'tranthib@example.com', '0123456789', 'hashed_password_2', 'normal_user'),
+    (1003, 'Le Van C', 'levanc@example.com', '0909090909', 'hashed_password_3', 'vip_user'),
+    (1004, 'Pham Thi D', 'phamthid@example.com', '0912345678', 'hashed_password_4', 'vip_user'),
+    (1005, 'Hoang Van E', 'hoangvane@example.com', '0888888888', 'hashed_password_5', 'normal_user'),
+    (1006, 'Do Thi F', 'dothif@example.com', '0777777777', 'hashed_password_6', 'normal_user'),
+    (1007, 'Nguyen Van G', 'nguyenvang@example.com', '0966666666', 'hashed_password_7', 'vip_user'),
+    (1008, 'Tran Van H', 'tranvanh@example.com', '0833333333', 'hashed_password_8', 'normal_user'),
+    (1009, 'Le Thi I', 'lethii@example.com', '0944444444', 'hashed_password_9', 'vip_user'),
+    (1010, 'Pham Van J', 'phamvanj@example.com', '0899999999', 'hashed_password_10', 'normal_user');
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_LichChieu
+    INSERT INTO tbl_LichChieu (ma_lich_chieu, ma_rap, ma_phim, ngay_gio_chieu, gia_ve) VALUES
+    (10001, 101, 1, '2023-08-10 19:30:00', 120000),
+    (10002, 102, 3, '2023-08-11 21:15:00', 100000),
+    (10003, 103, 5, '2023-08-12 18:00:00', 90000),
+    (10004, 104, 7, '2023-08-12 20:30:00', 110000),
+    (10005, 105, 9, '2023-08-13 15:45:00', 150000),
+    (10006, 101, 2, '2023-08-14 14:00:00', 95000),
+    (10007, 102, 4, '2023-08-15 16:30:00', 130000),
+    (10008, 103, 6, '2023-08-16 17:45:00', 80000),
+    (10009, 104, 8, '2023-08-17 19:00:00', 125000),
+    (10010, 105, 10, '2023-08-18 21:30:00', 140000);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_DatVe
+    INSERT INTO tbl_DatVe (tai_khoan, ma_lich_chieu, ma_ghe) VALUES
+    (1001, 10001, 1),
+    (1002, 10001, 2),
+    (1003, 10001, 3),
+    (1004, 10002, 5),
+    (1005, 10002, 6),
+    (1006, 10002, 7),
+    (1007, 10003, 10),
+    (1008, 10003, 11),
+    (1009, 10004, 14),
+    (1010, 10004, 15);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_Ghe
+    INSERT INTO tbl_Ghe (ma_ghe, ten_ghe, loai_ghe, ma_rap) VALUES
+    (1, 'A1', 'Thuong', 101),
+    (2, 'A2', 'Thuong', 101),
+    (3, 'A3', 'Thuong', 101),
+    (4, 'B1', 'VIP', 101),
+    (5, 'B2', 'VIP', 101),
+    (6, 'B3', 'VIP', 101),
+    (7, 'C1', 'Thuong', 102),
+    (8, 'C2', 'Thuong', 102),
+    (9, 'C3', 'Thuong', 102),
+    (10, 'D1', 'VIP', 102);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_RapPhim
+    INSERT INTO tbl_RapPhim (ma_rap, ten_rap, ma_cum_rap) VALUES
+    (101, 'Rạp 1', 201),
+    (102, 'Rạp 2', 201),
+    (103, 'Rạp 3', 202),
+    (104, 'Rạp 4', 203),
+    (105, 'Rạp 5', 204);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_CumRap
+    INSERT INTO tbl_CumRap (ma_cum_rap, ten_cum_rap, dia_chi, ma_he_thong_rap) VALUES
+    (201, 'Cụm Rạp A', '123 Đường ABC, Quận X, TP HCM', 301),
+    (202, 'Cụm Rạp B', '456 Đường DEF, Quận Y, TP HCM', 302),
+    (203, 'Cụm Rạp C', '789 Đường GHI, Quận Z, TP HCM', 303),
+    (204, 'Cụm Rạp D', '101 Đường XYZ, Quận W, TP HCM', 304);
+
+    -- Tiếp tục chèn dữ liệu cho bảng tbl_HeThongRap
+    INSERT INTO tbl_HeThongRap (ma_he_thong_rap, ten_he_thong_rap, logo) VALUES
+    (301, 'Hệ Thống Rạp X', 'https://www.example.com/logo_rap_x.jpg'),
+    (302, 'Hệ Thống Rạp Y', 'https://www.example.com/logo_rap_y.jpg'),
+    (303, 'Hệ Thống Rạp Z', 'https://www.example.com/logo_rap_z.jpg'),
+    (304, 'Hệ Thống Rạp W', 'https://www.example.com/logo_rap_w.jpg');
+
+    -- Nếu không có lỗi, thực hiện COMMIT để lưu thay đổi vào cơ sở dữ liệu
+    COMMIT;
+END TRY
+BEGIN CATCH
+    -- Nếu có lỗi, thực hiện ROLLBACK để hoàn tác giao dịch
+    ROLLBACK;
+    THROW;
+END CATCH;
