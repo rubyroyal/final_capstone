@@ -28,8 +28,8 @@ async function bootstrap() {
     .setDescription('Đặc tả API')
     .setVersion('1.0')
     .addBearerAuth()
-    .addApiKey({ type: 'apiKey', in: 'body', name: 'email' }, 'email')
-    .addApiKey({ type: 'apiKey', in: 'body', name: 'pass_word' }, 'pass_word')
+    // .addApiKey({ type: 'apiKey', in: 'body', name: 'email' }, 'email')
+    // .addApiKey({ type: 'apiKey', in: 'body', name: 'pass_word' }, 'pass_word')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
