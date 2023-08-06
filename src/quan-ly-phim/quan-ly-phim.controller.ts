@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { QuanLyPhimService } from './quan-ly-phim.service';
 import { CreateQuanLyPhimDto } from './dto/create-quan-ly-phim.dto';
 import { UpdateQuanLyPhimDto } from './dto/update-quan-ly-phim.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("QuanLyPhim")
 @Controller('quan-ly-phim')
 export class QuanLyPhimController {
   constructor(private readonly quanLyPhimService: QuanLyPhimService) {}

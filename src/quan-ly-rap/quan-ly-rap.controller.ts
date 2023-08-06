@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { QuanLyRapService } from './quan-ly-rap.service';
 import { CreateQuanLyRapDto } from './dto/create-quan-ly-rap.dto';
 import { UpdateQuanLyRapDto } from './dto/update-quan-ly-rap.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("QuanLyRap")
 @Controller('quan-ly-rap')
 export class QuanLyRapController {
   constructor(private readonly quanLyRapService: QuanLyRapService) {}

@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { QuanLyDatVeService } from './quan-ly-dat-ve.service';
 import { CreateQuanLyDatVeDto } from './dto/create-quan-ly-dat-ve.dto';
 import { UpdateQuanLyDatVeDto } from './dto/update-quan-ly-dat-ve.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("QuanLyDatVe")
 @Controller('quan-ly-dat-ve')
 export class QuanLyDatVeController {
   constructor(private readonly quanLyDatVeService: QuanLyDatVeService) {}
