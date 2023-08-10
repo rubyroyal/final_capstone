@@ -37,6 +37,11 @@ BEGIN TRY
     (9, 8, 'https://www.example.com/banner_pulp_fiction.jpg'),
     (10, 10, 'https://www.example.com/banner_lotr_return_of_the_king.jpg');
 
+    -- Tiếp tục thêm dữ liệu cho bảng tbl_LoaiNguoiDung
+    INSERT INTO tbl_LoaiNguoiDung (ma_loai_nguoi_dung, ten_loai) VALUES
+    ('ADMIN', 'admin'),
+    ('USER', 'normal_user')
+
     -- Tiếp tục chèn dữ liệu cho bảng tbl_NguoiDung
     INSERT INTO tbl_NguoiDung (tai_khoan, ho_ten, email, so_dt, mat_khau, loai_nguoi_dung) VALUES
     (1001, 'Nguyen Van A', 'nguyenvana@example.com', '0987654321', 'hashed_password_1', 'normal_user'),
