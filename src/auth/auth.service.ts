@@ -38,7 +38,7 @@ export class AuthService {
           message: 'Tài khoản này đã tồn tại !!!',
         });
       } else if (checkEmailExist) {
-        return res.status(400).json({
+        return res.status(400).json({ 
           status: '400',
           message: 'Email này đã tồn tại !!!',
         });
