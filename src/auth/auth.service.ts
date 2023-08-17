@@ -6,9 +6,7 @@ import { loginDto } from './dto/auth.dto';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { createUserDto } from 'src/quan-ly-nguoi-dung/dto/user.dto';
-
-// Thiết lập mã loại người dùng = phân quyền
-const ma_loai_nguoi_dung = 'USER';
+import { Roles } from 'src/roles/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +50,7 @@ export class AuthService {
             email: userSignUp.email,
             so_dt: userSignUp.so_dt,
             mat_khau: bcrypt.hashSync(userSignUp.mat_khau, 10),
-            ma_loai_nguoi_dung: ma_loai_nguoi_dung,
+            ma_loai_nguoi_dung: Roles.USER,
           },
         });
 
@@ -82,10 +80,10 @@ export class AuthService {
         ) {
           checkUser = { ...checkUser, mat_khau: '' };
 
-          const token = await this.jwtService.signAsync(
-            { tai_khoan: checkUser.tai_khoan },
-            { secret: this.configService.get('KEY'), expiresIn: '1d' },
-          );
+          const token = await this.jwtService.signAsync(checkUser, {
+            secret: this.configService.get('KEY'),
+            expiresIn: '1d',
+          });
 
           const data = { user: checkUser, token: token };
           return res.status(200).json({

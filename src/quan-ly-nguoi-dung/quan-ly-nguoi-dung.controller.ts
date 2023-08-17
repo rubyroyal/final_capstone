@@ -1,8 +1,22 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Query,
+  Res,
+  UseGuards,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { QuanLyNguoiDungService } from './quan-ly-nguoi-dung.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { userDto } from './dto/user.dto';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('QuanLyNguoiDung')
 @Controller('quan-ly-nguoi-dung')
 export class QuanLyNguoiDungController {
@@ -51,5 +65,28 @@ export class QuanLyNguoiDungController {
       keyWord,
       res,
     );
+  }
+
+  // @Post('ThongTinTaiKhoan')
+  // postAccountInfo(@Headers('Authorization') token: string, res: Response) {
+  //   return this.quanLyNguoiDungService.postAccountInfo(token, res);
+  // }
+
+  @Post('ThemNguoiDung')
+  createAccount(
+    @Body() bodyUser: userDto,
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.createAccount(bodyUser, token, res);
+  }
+
+  @Delete('XoaNguoiDung')
+  deleteUser(
+    @Query('taiKhoan') account: string,
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.deleteUser(Number(account), token, res);
   }
 }
