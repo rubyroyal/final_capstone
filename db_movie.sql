@@ -67,6 +67,20 @@ CREATE TABLE `tbl_HeThongRap` (
   `logo` varchar(255)
 );
 
+CREATE TABLE `tbl_LoaiNguoiDung` (
+	`ma_loai_nguoi_dung` varchar(100) PRIMARY KEY,
+	`ten_loai` varchar(255)
+);
+
+ALTER TABLE `tbl_NguoiDung` DROP COLUMN `loai_nguoi_dung` ;
+
+ALTER TABLE `tbl_NguoiDung` ADD COLUMN `ma_loai_nguoi_dung` varchar(100);
+
+ALTER TABLE `tbl_NguoiDung` ADD FOREIGN KEY (`ma_loai_nguoi_dung`) REFERENCES `tbl_LoaiNguoiDung` (`ma_loai_nguoi_dung`);
+
+UPDATE `tbl_NguoiDung`
+SET `ma_loai_nguoi_dung` = 'USER';
+
 ALTER TABLE `tbl_Banner` ADD FOREIGN KEY (`ma_phim`) REFERENCES `tbl_Phim` (`ma_phim`);
 
 ALTER TABLE `tbl_CumRap` ADD FOREIGN KEY (`ma_he_thong_rap`) REFERENCES `tbl_HeThongRap` (`ma_he_thong_rap`);

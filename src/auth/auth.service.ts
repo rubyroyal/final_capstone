@@ -5,7 +5,8 @@ import { PrismaClient } from '@prisma/client';
 import { loginDto } from './dto/auth.dto';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
-import { userDto } from 'src/quan-ly-nguoi-dung/dto/user.dto';
+import { createUserDto } from 'src/quan-ly-nguoi-dung/dto/user.dto';
+import { Roles } from 'src/roles/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
   prisma = new PrismaClient();
 
   // signUp
-  async signUp(userSignUp: userDto, res: Response) {
+  async signUp(userSignUp: createUserDto, res: Response) {
     try {
       let checkEmailExist = await this.prisma.tbl_NguoiDung.findFirst({
         where: {
@@ -36,26 +37,30 @@ export class AuthService {
           status: '400',
           message: 'Tài khoản này đã tồn tại !!!',
         });
-      } 
-      if (checkEmailExist) {
-        return res.status(400).json({
+      } else if (checkEmailExist) {
+        return res.status(400).json({ 
           status: '400',
           message: 'Email này đã tồn tại !!!',
         });
       } else {
-       const datam =  await this.prisma.tbl_NguoiDung.create({
+        await this.prisma.tbl_NguoiDung.create({
           data: {
             tai_khoan: Number(userSignUp.tai_khoan),
             ho_ten: userSignUp.ho_ten,
             email: userSignUp.email,
             so_dt: userSignUp.so_dt,
             mat_khau: bcrypt.hashSync(userSignUp.mat_khau, 10),
-            loai_nguoi_dung: userSignUp.loai_nguoi_dung,
+            ma_loai_nguoi_dung: Roles.USER,
           },
+        });
+
+        return res.status(200).json({
+          status: '200',
+          message: 'Tạo tài khoản thành công.',
         });
       }
     } catch (error) {
-      throw new HttpException(error.response, error.status); 
+      throw new HttpException(error.response, error.status);
     }
   }
 
@@ -75,10 +80,10 @@ export class AuthService {
         ) {
           checkUser = { ...checkUser, mat_khau: '' };
 
-          const token = await this.jwtService.signAsync(
-            { tai_khoan: checkUser.tai_khoan },
-            { secret: this.configService.get('KEY'), expiresIn: '1d' },
-          );
+          const token = await this.jwtService.signAsync(checkUser, {
+            secret: this.configService.get('KEY'),
+            expiresIn: '1d',
+          });
 
           const data = { user: checkUser, token: token };
           return res.status(200).json({
