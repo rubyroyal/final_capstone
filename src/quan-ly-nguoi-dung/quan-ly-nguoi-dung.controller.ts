@@ -8,12 +8,13 @@ import {
   UseGuards,
   Post,
   Body,
+  Put,
 } from '@nestjs/common';
 import { QuanLyNguoiDungService } from './quan-ly-nguoi-dung.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { userDto } from './dto/user.dto';
+import { updateUserDto, userDto } from './dto/user.dto';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -68,9 +69,23 @@ export class QuanLyNguoiDungController {
   }
 
   // @Post('ThongTinTaiKhoan')
-  // postAccountInfo(@Headers('Authorization') token: string, res: Response) {
+  // postAccountInfo(
+  //   @Headers('Authorization') token: string,
+  //   @Res() res: Response,
+  // ) {
   //   return this.quanLyNguoiDungService.postAccountInfo(token, res);
   // }
+
+  @Post('LayThongTinNguoiDung')
+  getUserInfoByAccount(
+    @Query('taiKhoan') account: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.getUserInfoByAccount(
+      Number(account),
+      res,
+    );
+  }
 
   @Post('ThemNguoiDung')
   createAccount(
@@ -79,6 +94,36 @@ export class QuanLyNguoiDungController {
     @Res() res: Response,
   ) {
     return this.quanLyNguoiDungService.createAccount(bodyUser, token, res);
+  }
+
+  @Put('CapNhatThongTinNguoiDung')
+  updatePersonalInfo(
+    @Query('taiKhoan') account: string,
+    @Body() bodyUser: updateUserDto,
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.updatePersonalInfo(
+      Number(account),
+      bodyUser,
+      token,
+      res,
+    );
+  }
+
+  @Post('CapNhatThongTinNguoiDung')
+  updateUserInfoByRole(
+    @Query('taiKhoan') account: string,
+    @Body() bodyUser: updateUserDto,
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.updateUserInfoByRole(
+      Number(account),
+      bodyUser,
+      token,
+      res,
+    );
   }
 
   @Delete('XoaNguoiDung')

@@ -9,12 +9,29 @@ export class createUserDto {
 
   @ApiProperty()
   email: string;
-  
+
   @ApiProperty()
   so_dt: string;
-  
+
   @ApiProperty()
   mat_khau: string;
+}
+
+export class updateUserDto {
+  @ApiProperty()
+  ho_ten: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  so_dt: string;
+
+  @ApiProperty()
+  mat_khau: string;
+
+  @ApiProperty()
+  ma_loai_nguoi_dung: string;
 }
 
 export class userDto {
@@ -26,14 +43,13 @@ export class userDto {
 
   @ApiProperty()
   email: string;
-  
+
   @ApiProperty()
   so_dt: string;
-  
+
   @ApiProperty()
   mat_khau: string;
-  
+
   @ApiProperty()
   ma_loai_nguoi_dung: string;
 }
-
