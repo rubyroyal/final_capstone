@@ -68,13 +68,13 @@ export class QuanLyNguoiDungController {
     );
   }
 
-  // @Post('ThongTinTaiKhoan')
-  // postAccountInfo(
-  //   @Headers('Authorization') token: string,
-  //   @Res() res: Response,
-  // ) {
-  //   return this.quanLyNguoiDungService.postAccountInfo(token, res);
-  // }
+  @Post('ThongTinTaiKhoan')
+  postAccountInfo(
+    @Headers('Authorization') token: string,
+    @Res() res: Response,
+  ) {
+    return this.quanLyNguoiDungService.postAccountInfo(token, res);
+  }
 
   @Post('LayThongTinNguoiDung')
   getUserInfoByAccount(

@@ -96,3 +96,5 @@ ALTER TABLE `tbl_Phim` ADD FOREIGN KEY (`ma_phim`) REFERENCES `tbl_LichChieu` (`
 ALTER TABLE `tbl_RapPhim` ADD FOREIGN KEY (`ma_rap`) REFERENCES `tbl_LichChieu` (`ma_rap`);
 
 ALTER TABLE `tbl_Ghe` ADD FOREIGN KEY (`ma_rap`) REFERENCES `tbl_RapPhim` (`ma_rap`);
+
+ALTER TABLE `tbl_DatVe` ADD FOREIGN KEY (`ma_ghe`) REFERENCES `tbl_Ghe` (`ma_ghe`);
