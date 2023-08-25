@@ -31,12 +31,13 @@ model tbl_DatVe {
   tai_khoan     Int
   ma_lich_chieu Int
   ma_ghe        Int?
-  tbl_Ghe       tbl_Ghe?      @relation(fields: [ma_ghe], references: [ma_ghe], onDelete: NoAction, onUpdate: NoAction, map: "tbl_DatVe_ibfk_1")
+  tbl_NguoiDung tbl_NguoiDung @relation(fields: [tai_khoan], references: [tai_khoan], onDelete: NoAction, onUpdate: NoAction, map: "tbl_DatVe_ibfk_1")
   tbl_LichChieu tbl_LichChieu @relation(fields: [ma_lich_chieu], references: [ma_lich_chieu], onDelete: NoAction, onUpdate: NoAction, map: "tbl_DatVe_ibfk_2")
+  tbl_Ghe       tbl_Ghe?      @relation(fields: [ma_ghe], references: [ma_ghe], onDelete: NoAction, onUpdate: NoAction, map: "tbl_DatVe_ibfk_3")
 
   @@id([tai_khoan, ma_lich_chieu])
-  @@index([ma_ghe], map: "ma_ghe")
   @@index([ma_lich_chieu], map: "ma_lich_chieu")
+  @@index([ma_ghe], map: "ma_ghe")
 }
 
 model tbl_Ghe {
@@ -78,6 +79,7 @@ model tbl_NguoiDung {
   so_dt              String?            @db.VarChar(255)
   mat_khau           String?            @db.VarChar(255)
   ma_loai_nguoi_dung String?            @db.VarChar(100)
+  tbl_DatVe          tbl_DatVe[]
   tbl_LoaiNguoiDung  tbl_LoaiNguoiDung? @relation(fields: [ma_loai_nguoi_dung], references: [ma_loai_nguoi_dung], onDelete: NoAction, onUpdate: NoAction, map: "tbl_NguoiDung_ibfk_1")
 
   @@index([ma_loai_nguoi_dung], map: "ma_loai_nguoi_dung")
