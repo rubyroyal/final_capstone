@@ -3,7 +3,12 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaClient, tbl_NguoiDung } from '@prisma/client';
 import { Response } from 'express';
 import { Roles } from 'src/roles/roles.enum';
-import { updateUserDto, userDto } from './dto/user.dto';
+import {
+  danhSachGheDto,
+  thongTinDatVeDto,
+  updateUserDto,
+  userDto,
+} from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -153,219 +158,112 @@ export class QuanLyNguoiDungService {
     }
   }
 
-  //   Thông tin tài khoản (cần xem lại)
+  //   Thông tin tài khoản
   async postAccountInfo(token: string, res: Response) {
-    // try {
+    try {
+      let payload: tbl_NguoiDung | any = this.jwtService.decode(
+        token.split(' ')[1],
+      );
 
-    let payload: tbl_NguoiDung | any = this.jwtService.decode(
-      token.split(' ')[1],
-    );
+      const user = await this.prisma.tbl_NguoiDung.findFirst({
+        where: {
+          tai_khoan: payload.tai_khoan,
+        },
+        include: {
+          tbl_LoaiNguoiDung: true,
+        },
+      });
 
-    // if(payload.ma_loai_nguoi_dung === Roles.ADMIN) {
-    // const content = this.prisma.tbl_NguoiDung.findUnique({
-    //   where: {
-    //     tai_khoan: payload.tai_khoan
-    //   },
-    //   include: {
-    //     tbl_LoaiNguoiDung: true,
-    //     tbl_DatVe: {
-    //       include: {
-    //         tbl_LichChieu: {
-    //           include: {
-    //             tbl_Phim: true
-    //             // {
-    //             //   select: {
-    //             //     ten_phim: true,
-    //             //     hinh_anh: true
-    //             //   }
-    //             // }
-    //           },
-    //           select: {
-    //             gia_ve: true
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
+      const booking = await this.prisma.tbl_DatVe.findMany({
+        where: {
+          tai_khoan: payload.tai_khoan,
+        },
+        include: {
+          tbl_Ghe: {
+            select: {
+              ma_ghe: true,
+              ten_ghe: true,
+            },
+          },
 
-    // console.log(content);
+          tbl_LichChieu: {
+            select: {
+              gia_ve: true,
 
-    const content = await this.prisma.tbl_NguoiDung.findUnique({
-      where: {
-        tai_khoan: payload.tai_khoan,
-      },
-      include: {
-        tbl_LoaiNguoiDung: true,
+              tbl_Phim: {
+                select: {
+                  ten_phim: true,
+                  hinh_anh: true,
+                },
+              },
 
-        tbl_DatVe: {
-          include: {
-            tbl_LichChieu: {
-              include: {
-                tbl_Phim: {
-                  select: {
-                    ten_phim: true,
-                    hinh_anh: true,
+              tbl_RapPhim: {
+                select: {
+                  ma_rap: true,
+                  ten_rap: true,
+
+                  tbl_CumRap: {
+                    select: {
+                      ma_cum_rap: true,
+                      ten_cum_rap: true,
+
+                      tbl_HeThongRap: {
+                        select: {
+                          ma_he_thong_rap: true,
+                          ten_he_thong_rap: true,
+                        },
+                      },
+                    },
                   },
                 },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    res.status(200).json({
-      status: '200',
-      message: 'Lấy dữ liệu thành công.',
-      content,
-    });
+      const danhSachGhe: danhSachGheDto[] = booking?.map((item) => ({
+        ma_he_thong_rap:
+          item.tbl_LichChieu.tbl_RapPhim.tbl_CumRap.tbl_HeThongRap
+            .ma_he_thong_rap,
+        ten_he_thong_rap:
+          item.tbl_LichChieu.tbl_RapPhim.tbl_CumRap.tbl_HeThongRap
+            .ten_he_thong_rap,
+        ma_cum_rap: item.tbl_LichChieu.tbl_RapPhim.tbl_CumRap.ma_cum_rap,
+        ten_cum_rap: item.tbl_LichChieu.tbl_RapPhim.tbl_CumRap.ten_cum_rap,
+        ma_rap: item.tbl_LichChieu.tbl_RapPhim.ma_rap,
+        ten_rap: item.tbl_LichChieu.tbl_RapPhim.ten_rap,
+        ma_ghe: item.tbl_Ghe.ma_ghe,
+        ten_ghe: item.tbl_Ghe.ten_ghe,
+      }));
 
-    // } else {
-    //   res.status(403).json({
-    //     status: '403',
-    //     message: 'Bạn không có quyền hạn ở tài nguyên này !!!',
-    //   });
-    // }
+      const thongTinDatVe: thongTinDatVeDto[] = booking?.map((item) => ({
+        ten_phim: item.tbl_LichChieu.tbl_Phim.ten_phim,
+        hinh_anh: item.tbl_LichChieu.tbl_Phim.hinh_anh,
+        gia_ve: item.tbl_LichChieu.gia_ve,
+        danhSachGhe,
+      }));
 
-    // const thongTinDatVe = thongTinDatVeDto[];
-    // const danhSachGhe = danhSachGheDto[""];
+      const data = {
+        tai_khoan: user.tai_khoan,
+        ho_ten: user.ho_ten,
+        email: user.email,
+        so_dt: user.so_dt,
+        loaiNguoiDung: {
+          maLoaiNguoiDung: user.tbl_LoaiNguoiDung.ma_loai_nguoi_dung,
+          tenLoai: user.tbl_LoaiNguoiDung.ten_loai,
+        },
+        thongTinDatVe: thongTinDatVe,
+      };
 
-    // const [userInfo, thongTinDatVe, danhSachGhe]: [userDto, thongTinDatVeDto[], danhSachGheDto[]] = await Promise.all([
-    //   this.prisma.tbl_NguoiDung.findFirst({
-    //     where: {
-    //       tai_khoan: payload.tai_khoan
-    //     },
-    //     include: {
-    //       tbl_LoaiNguoiDung: true
-    //     }
-    //   }),
-
-    //   this.prisma.tbl_DatVe.findMany({
-    //     where: {
-    //       tai_khoan: payload.tai_khoan
-    //     },
-    //     include: {
-    //       tbl_LichChieu:{
-    //         include: {
-    //           tbl_Phim: {
-    //             select: {
-    //               ten_phim: true,
-    //               hinh_anh: true,
-    //             }
-    //           }
-    //         },
-    //         select: {
-    //           gia_ve: true
-    //         }
-    //       }
-    //     }
-    //   })
-    // ])
-
-    // const data = await this.prisma.tbl_NguoiDung.findFirst({
-    //   where: {
-    //     tai_khoan: payload.tai_khoan,
-    //   },
-    //   include: {
-    //     tbl_DatVe:{
-
-    //     },
-
-    //     tbl_LoaiNguoiDung: true,
-    //   },
-    // });
-
-    // const ticket = await this.prisma.tbl_DatVe.findFirst({
-    //   where: {
-    //     tai_khoan: payload.tai_khoan,
-    //   },
-    //   include: {
-    //     tbl_LichChieu: {
-    //       include: {
-    //         tbl_Phim: true,
-    //       },
-    //     },
-    //   },
-    // });
-
-    // const danhSachGhe = [];
-
-    // if (ticket) {
-    // const thongTinDatVe = [
-    //   // ten_phim: ticket.tbl_LichChieu.tbl_Phim.ten_phim,
-    //   // hinh_anh: ticket.tbl_LichChieu.tbl_Phim.hinh_anh,
-    //   // gia_ve: ticket.tbl_LichChieu.gia_ve,
-    // ];
-
-    // // Tạo danh sách ghế
-    // const danhSachGheItem = await Promise.all(
-    //   danhSachGhe.map(async (maGhe) => {
-    //     // Tìm kiếm ghế trong cơ sở dữ liệu theo mã ghế
-    //     const seat = await this.prisma.tbl_Ghe.findUnique({
-    //       where: {
-    //         ma_ghe: maGhe,
-    //       },
-    //       include: {
-    //         tbl_RapPhim: {
-    //           include: {
-    //             tbl_CumRap: {
-    //               include: {
-    //                 tbl_HeThongRap: true,
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //     });
-    //   }),
-    // );
-
-    // const user = await this.prisma.tbl_NguoiDung.update({
-    //   where: {
-    //     tai_khoan: payload.tai_khoan,
-    //   },
-    //   data: {
-    //     tbl_DatVe: {
-    //       create: {
-    //         ...thongTinDatVe,
-    //         danhSachGhe: {
-    //           createMany: {
-    //             data: danhSachGhe,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    //   include: {
-    //     tbl_LoaiNguoiDung: true,
-    //     tbl_DatVe: true,
-    //   },
-    // });
-    // }
-
-    // return res.status(200).json({
-    //   status: '200',
-    //   message: 'Lấy dữu liệu thành công.',
-    //   user,
-    // });
-    // }
-
-    // if (data) {
-    //   return res.status(200).json({
-    //     status: '200',
-    //     message: 'Lấy dữu liệu thành công.',
-    //     data,
-    //   });
-    // } else {
-    //   return res.status(404).json({
-    //     status: '404',
-    //     message: 'Dữ liệu không tồn tại !!!',
-    //   });
-    // }
-    // } catch (error) {
-    //   throw new HttpException(error.response, error.status);
-    // }
+      res.status(200).json({
+        status: '200',
+        message: 'Lấy dữ liệu thành công.',
+        data,
+      });
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 
   // Lấy thông tin người dùng
